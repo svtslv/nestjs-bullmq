@@ -1,0 +1,68 @@
+{
+  "name": "nestjs-bullmq",
+  "version": "0.0.1-test.4",
+  "description": "Nest - modern, fast, powerful node.js web framework (@bullmq)",
+  "author": "Sviatoslav H",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svtslv/nestjs-bullmq"
+  },
+  "keywords": [
+    "nest",
+    "nestjs",
+    "bull",
+    "bullmq",
+    "redis",
+    "queue"
+  ],
+  "files": [
+    "dist",
+    "index.js",
+    "index.d.ts"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "fix": "rm -rf node_modules && rm package-lock.json && npm install",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "format": "prettier --write \"**/*.ts\"",
+    "lint": "eslint 'lib/**/*.ts' --fix",
+    "test": "jest --config ./test/jest.config.json --runInBand",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish --access public",
+    "prepublish:test": "npm run build",
+    "publish:test": "npm publish --access public --tag test",
+    "prerelease": "npm run build",
+    "release": "release-it"
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=6.7.0",
+    "@nestjs/core": ">=6.7.0",
+    "bullmq": ">=1.8.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^7.0.3",
+    "@nestjs/core": "^7.0.3",
+    "@nestjs/platform-express": "^7.0.7",
+    "@nestjs/testing": "^7.0.3",
+    "@types/express": "^4.17.6",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.2",
+    "@types/supertest": "^2.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "bullmq": "^1.8.7",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "reflect-metadata": "^0.1.13",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.2.1",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.7.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.8.3"
+  }
+}
