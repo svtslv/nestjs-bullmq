@@ -6,7 +6,7 @@ import {
   BULLMQ_MODULE_OPTIONS_TOKEN
 } from './bullmq.constants';
 
-import * as Redis from 'ioredis';
+// import * as Redis from 'ioredis';
 
 export { Queue, Worker, QueueEvents, QueueScheduler }
 export * as bullmq from 'bullmq';
@@ -23,9 +23,9 @@ export function createBullMQConnection(connection: string, options: BullMQModule
   const { config } = options;
   const queueName = connection || BULLMQ_MODULE_CONNECTION;
 
-  if(!(config.connection instanceof Redis)) {
-    config.connection = new Redis(config.connection);
-  }
+  // if(!(config.connection instanceof Redis)) {
+  //   config.connection = new Redis(config.connection);
+  // }
 
   return {
     queue: new Queue(queueName, config),

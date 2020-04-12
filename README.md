@@ -69,7 +69,7 @@ import { AppController } from './app.controller';
 export class AppModule {}
 ```
 
-### InjectBullMQ(queueName?, connection?)
+### InjectBullMQ(connection?)
 
 ```ts
 import { Controller, Get, } from '@nestjs/common';
