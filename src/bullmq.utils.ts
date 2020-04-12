@@ -6,32 +6,37 @@ import {
   BULLMQ_MODULE_OPTIONS_TOKEN
 } from './bullmq.constants';
 
-// import * as Redis from 'ioredis';
-
 export { Queue, Worker, QueueEvents, QueueScheduler }
 export * as bullmq from 'bullmq';
 
-export function getBullMQOptionsToken(connection: string): string {
-  return `${ connection || BULLMQ_MODULE_CONNECTION }_${ BULLMQ_MODULE_OPTIONS_TOKEN }`;
+export function getBullMQOptionsToken(options: Partial<BullMQModuleOptions>, connection: string): string {
+  const queueName = options?.name || connection || BULLMQ_MODULE_CONNECTION;
+  return `${ queueName }_${ connection || queueName }_${ BULLMQ_MODULE_OPTIONS_TOKEN }`;
 }
 
-export function getBullMQConnectionToken(connection?: string): string {
-  return `${ connection || BULLMQ_MODULE_CONNECTION }_${ BULLMQ_MODULE_CONNECTION_TOKEN }`;
+export function getBullMQConnectionToken(options: Partial<BullMQModuleOptions>, connection: string): string {
+  const queueName = options?.name || connection || BULLMQ_MODULE_CONNECTION;
+  return `${ queueName }_${ connection || queueName }_${ BULLMQ_MODULE_CONNECTION_TOKEN }`;
 }
 
-export function createBullMQConnection(connection: string, options: BullMQModuleOptions): BullMQ {
-  const { config } = options;
-  const queueName = connection || BULLMQ_MODULE_CONNECTION;
+export function createBullMQConnection(options: BullMQModuleOptions, connection: string): BullMQ {
+  const { config, name } = options;
+  const queueName = name || connection || BULLMQ_MODULE_CONNECTION;
 
-  // if(!(config.connection instanceof Redis)) {
-  //   config.connection = new Redis(config.connection);
-  // }
+  if(config?.url) {
+    const url = new URL(config.url);
+    config.connection = {
+      host: url.hostname,
+      port: +url.port,
+      password: url.password,
+    }
+  }
 
   return {
-    queue: new Queue(queueName, config),
     process: (callback: (job: Job) => any): Worker => {
       return new Worker(queueName, callback, config);
     },
+    queue: new Queue(queueName, config),
     queueEvents: new QueueEvents(queueName, config),
     queueScheduler: new QueueScheduler(queueName, config),
   };

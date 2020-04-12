@@ -1,6 +1,6 @@
 {
   "name": "nestjs-bullmq",
-  "version": "0.0.2",
+  "version": "0.1.0-test.1",
   "description": "Nest - modern, fast, powerful node.js web framework (@bullmq)",
   "author": "Sviatoslav H",
   "license": "MIT",

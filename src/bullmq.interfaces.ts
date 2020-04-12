@@ -9,7 +9,8 @@ export type BullMQ = {
 }
 
 export interface BullMQModuleOptions {
-  config: QueueBaseOptions;
+  name?: string,
+  config: QueueBaseOptions & { url?: string };
 }
 
 export interface BullMQModuleOptionsFactory {
@@ -17,6 +18,7 @@ export interface BullMQModuleOptionsFactory {
 }
 
 export interface BullMQModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+  name?: string,
   inject?: any[];
   useClass?: Type<BullMQModuleOptionsFactory>;
   useExisting?: Type<BullMQModuleOptionsFactory>;

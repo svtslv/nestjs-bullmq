@@ -37,10 +37,12 @@ import { AppController } from './app.controller';
 @Module({
   imports: [
     BullMQModule.forRoot({
+      name: 'QueueName',
       config: {
+        // url: 'redis://:password@localhost:6379',
         connection: { host: 'localhost', port: 6379 },
       },
-    }, 'QueueName'),
+    }),
   ],
   controllers: [AppController],
 })
@@ -57,19 +59,21 @@ import { AppController } from './app.controller';
 @Module({
   imports: [
     BullMQModule.forRootAsync({
+      name: 'QueueName',
       useFactory: () => ({
         config: {
+          // url: 'redis://:password@localhost:6379',
           connection: { host: 'localhost', port: 6379 }, 
         },
       }),
-    }, 'QueueName'),
+    }),
   ],
   controllers: [AppController],
 })
 export class AppModule {}
 ```
 
-### InjectBullMQ(connection?)
+### InjectBullMQ(queueName?, connection?)
 
 ```ts
 import { Controller, Get, } from '@nestjs/common';

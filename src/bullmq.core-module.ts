@@ -9,25 +9,25 @@ export class BullMQCoreModule {
   /* forRoot */
   static forRoot(options: BullMQModuleOptions, connection?: string): DynamicModule {
 
-    const knexOptionsProvider: Provider = {
-      provide: getBullMQOptionsToken(connection),
+    const bullMQOptionsProvider: Provider = {
+      provide: getBullMQOptionsToken(options, connection),
       useValue: options,
     };
 
-    const knexConnectionProvider: Provider = {
-      provide: getBullMQConnectionToken(connection),
-      useValue: createBullMQConnection(connection, options),
+    const bullMQConnectionProvider: Provider = {
+      provide: getBullMQConnectionToken(options, connection),
+      useValue: createBullMQConnection(options, connection),
     };
 
     return {
       module: BullMQCoreModule,
       providers: [
-        knexOptionsProvider,
-        knexConnectionProvider,
+        bullMQOptionsProvider,
+        bullMQConnectionProvider,
       ],
       exports: [
-        knexOptionsProvider,
-        knexConnectionProvider,
+        bullMQOptionsProvider,
+        bullMQConnectionProvider,
       ],
     };
   }
@@ -35,19 +35,20 @@ export class BullMQCoreModule {
   /* forRootAsync */
   public static forRootAsync(options: BullMQModuleAsyncOptions, connection: string): DynamicModule {
 
-    const knexConnectionProvider: Provider = {
-      provide: getBullMQConnectionToken(connection),
-      useFactory(options: BullMQModuleOptions) {
-        return createBullMQConnection(connection, options)
+    const bullMQConnectionProvider: Provider = {
+      provide: getBullMQConnectionToken(options, connection),
+      useFactory(syncOptions: BullMQModuleOptions) {
+        syncOptions.name = options.name;
+        return createBullMQConnection(syncOptions, connection)
       },
-      inject: [getBullMQOptionsToken(connection)],
+      inject: [getBullMQOptionsToken(options, connection)],
     };
 
     return {
       module: BullMQCoreModule,
       imports: options.imports,
-      providers: [...this.createAsyncProviders(options, connection), knexConnectionProvider],
-      exports: [knexConnectionProvider],
+      providers: [...this.createAsyncProviders(options, connection), bullMQConnectionProvider],
+      exports: [bullMQConnectionProvider],
     };
   }
 
@@ -79,14 +80,14 @@ export class BullMQCoreModule {
 
     if (options.useFactory) {
       return {
-        provide: getBullMQOptionsToken(connection),
+        provide: getBullMQOptionsToken(options, connection),
         useFactory: options.useFactory,
         inject: options.inject || [],
       };
     }
 
     return {
-      provide: getBullMQOptionsToken(connection),
+      provide: getBullMQOptionsToken(options, connection),
       async useFactory(optionsFactory: BullMQModuleOptionsFactory): Promise<BullMQModuleOptions> {
         return await optionsFactory.createBullMQModuleOptions();
       },
